@@ -1,6 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Card, CardText, CardBody,
     CardTitle, CardHeader, Button } from 'reactstrap';
+import { addToCart, removeFromCart } from '../Actions';
 
 class ProductCard extends React.Component {
     constructor(props) {
@@ -14,6 +16,8 @@ class ProductCard extends React.Component {
     decrementHandler(event) {
         if(this.state.quantity > 1) {
             this.setState({quantity: (this.state.quantity - 1)});
+        } else if(this.state.quantity === 1) {
+            this.props.removeFromCart(event.target.id);
         }
     }
 
@@ -25,23 +29,53 @@ class ProductCard extends React.Component {
         }
     }
 
+    addItem(event, data) {
+        this.props.addToCart({...data.filter((item) => {
+            return item.id === event.target.id;
+        })[0], quantity: this.state.quantity});
+    }
+
+    renderButton(cart, data, id) {
+        const items = cart.filter((item) => {
+            return item.id === id;
+
+        });
+        if(items.length === 0) {
+            return (
+                <Button id={id} onClick={(evt) => this.addItem(evt, data)} block color="success">Add to Cart</Button>
+            );
+        }
+        else if(items[0].quantity !== this.state.quantity) {
+            return (
+                <Button id={id} onClick={(evt) => this.addItem(evt, data)} block color="success">
+                    Change Quantity
+                </Button>
+            );
+        } else {
+            return (
+                <Button id={id} disabled block color="secondary">Add to Cart</Button>
+            );
+        }
+    }
+
     render()
     {
         const {priceTextStyle, roundedButton} = styles;
-        const { imageURL, name, price } = this.props;
+        const { imageURL, name, price, id, cart, data } = this.props;
+
         return (
             <div style={{margin: '1rem'}}>
                 <Card>
-                    <img style={{objectFit: 'contain'}} height='200rem' src={imageURL} alt={`Image of ${this.props.name}`}/>
+                    <img style={{objectFit: 'contain'}} height='200rem' src={imageURL} alt={`${this.props.name}`}/>
                     <CardHeader> <span style={priceTextStyle}> $ {parseFloat(price)} </span> </CardHeader>
                     <CardBody style={{padding: '1rem'}}>
                         <CardTitle> {name} </CardTitle>
                         <CardText>
-                            <Button style={roundedButton} onClick={(evt) => this.decrementHandler(evt)}>-</Button>
+                            <Button id={id} style={roundedButton} onClick={(evt) => this.decrementHandler(evt)}>-</Button>
                             <span style={{padding: '0 1.5rem'}}> {this.state.quantity} </span>
                             <Button style={roundedButton} onClick={(evt) => this.incrementHandler(evt)}>+</Button>
                         </CardText>
-                        <Button block color="success">Add to Cart</Button>
+                        {this.renderButton(cart, data, id )}
                     </CardBody>
                 </Card>
             </div>
@@ -59,4 +93,4 @@ const styles = {
     }
 };
 
-export default ProductCard;
+export default connect(null, {addToCart, removeFromCart})(ProductCard);

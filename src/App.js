@@ -1,53 +1,38 @@
 import React, { Component } from 'react';
-import ProductCard from './Components/ProductCard.js';
+import { Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
+import { connect } from 'react-redux';
+import Ionicon from 'react-ionicons';
+// import { Link } from 'react-router-dom';
+import ProductCard from './Components/ProductCard';
+import Checkout from './Components/Checkout';
 import './App.css';
 
-const APIData = [
-    {
-        id: '123dft45f123dfg5g',
-        imageUrl: 'https://images.vat19.com/covers/large/butter-soda.jpg',
-        productName: 'Soda',
-        price: 3.05,
-        quantityAvailable: 13
-    },
-    {
-        id: '123dfd34f1asdEDa',
-        imageUrl: 'https://www.handletheheat.com/wp-content/uploads/2018/02/BAKERY-STYLE-CHOCOLATE-CHIP-COOKIES-9-768x768.jpg',
-        productName: 'Cookies',
-        price: 5.05,
-        quantityAvailable: 23
-    },
-    {
-        id: '12342Rft45f123dfg5g',
-        imageUrl: 'https://target.scene7.com/is/image/Target/GUEST_57991bf3-03e1-492d-b5d6-0e0223770c6d?wid=488&hei=488&fmt=pjpeg',
-        productName: 'Water',
-        price: 2.95,
-        quantityAvailable: 5
-    },
-    {
-        id: '75T42Rft45f123dfg5g',
-        imageUrl: 'https://images-na.ssl-images-amazon.com/images/I/910uahYmmPL._SL1500_.jpg',
-        productName: 'Chips',
-        price: 1.95,
-        quantityAvailable: 25
-    },
-    {
-        id: '7T42Rf4df545f123dRf4',
-        imageUrl: 'https://i5.walmartimages.com/asr/fc27a353-3b34-402e-94e6-e2105d6968c3_1.34f4843c019fbbbd31ed0c4d6692b5fe.jpeg?odnHeight=450&odnWidth=450&odnBg=FFFFFF',
-        productName: 'Snicker Bar',
-        price: 2.99,
-        quantityAvailable: 20
-    },
-    {
-        id: '76ef4Rft45f393dfR7G',
-        imageUrl: 'https://target.scene7.com/is/image/Target/GUEST_234b7c68-26f0-403f-8030-6263923057d5?wid=488&hei=488&fmt=pjpeg',
-        productName: 'Protein Shake - Chocolate',
-        price: 3.99,
-        quantityAvailable: 7
+const subtotal = (cart) => {
+    let subTotal = 0;
+    if(cart.length) {
+        cart.forEach((item) => {
+            subTotal += item.quantity * item.price;
+        });
     }
-];
+    return subTotal.toFixed(2);
+};
 
 class App extends Component {
+    constructor(props) {
+        super(props);
+
+        this.toggle = this.toggle.bind(this);
+        this.state = {
+            popoverOpen: false
+        };
+    }
+
+    toggle() {
+        this.setState({
+            popoverOpen: !this.state.popoverOpen
+        });
+    }
+
     renderRow(item) {
         const returnVal = [];
 
@@ -55,10 +40,13 @@ class App extends Component {
             returnVal.push(
                 <div key={item[i].id} className="col-sm col-xs-12">
                     <ProductCard
+                        id={item[i].id}
                         imageURL={item[i].imageUrl}
                         name={item[i].productName}
                         price={item[i].price}
                         quantityAvailable={item[i].quantityAvailable}
+                        cart={this.props.Cart}
+                        data={this.props.APIData}
                     />
                 </div>
             );
@@ -81,16 +69,70 @@ class App extends Component {
         return returnComponent;
     }
 
+    order(cart) {
+        fetch('http://127.0.0.1:3000/sms/', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                firstParam: `$ ${(parseFloat(subtotal(cart)) + subtotal(cart)*.05).toFixed(2)}`,
+                secondParam: 'yourOtherValue',
+            })
+        })
+    }
+
   render() {
     return (
       <div className="App">
           <br/>
+          {/*<Link to={{pathname: "/Checkout", state: this.props.Cart}}>*/}
+          <Button block size={'lg'} id="fixedButton" color='danger' onClick={this.toggle}>
+              Cart
+              <Ionicon icon="ios-cart" fontSize="35px" color="#FFF"/>
+              <sub>{`${this.props.Cart.length}`}</sub>
+          </Button>
+
+          <br/>
+          {/*</Link>*/}
+
+          <Popover placement="bottom" isOpen={this.state.popoverOpen} target="fixedButton" toggle={this.toggle}>
+              <PopoverHeader>
+                  <strong style={{textAlign: 'center'}}> Cart </strong>
+                  <Button outline size="sm" onClick={() => this.order(this.props.Cart)}> ORDER </Button>
+                  <Button outline size="sm" onClick={this.toggle} style={{float: 'right'}}>x</Button>
+                  <br/><br/>
+              </PopoverHeader>
+              <PopoverBody>
+                  <Checkout cart={this.props.Cart} />
+                  {(this.props.Cart.length > 0)? (
+                      <div style={{border: '1px solid #ddd', width:'60%', float: 'right', marginRight: '1rem'}} className={'container'}>
+                          <p style={{textAlign: 'right', fontSize: '1.1rem'}}>
+                              Subtotal: <b> $ {subtotal(this.props.Cart)} </b>
+                          </p>
+                          <p style={{textAlign: 'right', fontSize: '1.1rem'}}>
+                              Service Fee: <b> $ {(subtotal(this.props.Cart)*.05).toFixed(2)} </b>
+                          </p>
+                          <p style={{textAlign: 'right', fontSize: '1.1rem'}}>
+                              Total: <b> $ {(parseFloat(subtotal(this.props.Cart)) + subtotal(this.props.Cart)*.05).toFixed(2)} </b>
+                          </p>
+                      </div>
+                  ) : ''}
+              </PopoverBody>
+          </Popover>
+
           <div className="container">
-              {this.renderProducts(APIData)}
+              {this.renderProducts(this.props.APIData)}
           </div>
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+    console.log('cart', state.cart);
+    return { Cart: state.cart, APIData: state.products };
+};
+
+export default connect(mapStateToProps)(App);

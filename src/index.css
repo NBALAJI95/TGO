@@ -13,6 +13,16 @@ code {
     monospace;
 }
 
-.btn:focus {
-  outline: none !important;
+.popover {
+  max-width: 950px !important;
+}
+
+#fixedButton {
+    position: fixed;
+    top: 0;
+    z-index: 99;
+}
+
+#CheckoutCard {
+    font-size: 1.05rem;
 }
