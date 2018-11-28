@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/titanium-go.iml" filepath="$PROJECT_DIR$/.idea/titanium-go.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Titanium-Go.iml" filepath="$PROJECT_DIR$/.idea/Titanium-Go.iml" />
     </modules>
   </component>
 </project>
