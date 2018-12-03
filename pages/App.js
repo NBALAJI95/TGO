@@ -109,13 +109,14 @@ class App extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                firstParam: `$ ${(parseFloat(subtotal(cart)) + subtotal(cart)*.05).toFixed(2)}`,
-                secondParam: 'yourOtherValue',
+                firstParam: `$ ${(parseFloat(subtotal(cart)) + 0.79).toFixed(2)}`,
+                secondParam: this.props.Cart,
             })
         })
         .then((val) => {
             try {
                 console.log("ORDER SUCCESS!!!", val);
+                // Need to update quantity w.r.t cart
                 this.props.emptyCart();
 
                 this.setState({
@@ -166,10 +167,10 @@ class App extends Component {
                               Subtotal: <b> $ {subtotal(this.props.Cart)} </b>
                           </p>
                           <p style={{textAlign: 'right', fontSize: '1.1rem'}}>
-                              Service Fee: <b> $ {(subtotal(this.props.Cart)*.05).toFixed(2)} </b>
+                              Service Fee: <b> $ {(0.79).toFixed(2)} </b>
                           </p>
                           <p style={{textAlign: 'right', fontSize: '1.1rem'}}>
-                              Total: <b> $ {(parseFloat(subtotal(this.props.Cart)) + subtotal(this.props.Cart)*.05).toFixed(2)} </b>
+                              Total: <b> $ {(parseFloat(subtotal(this.props.Cart)) + 0.79).toFixed(2)} </b>
                           </p>
                       </div>
                   ) : ''}

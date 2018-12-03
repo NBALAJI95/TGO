@@ -2,7 +2,7 @@
   "name": "with-redux",
   "version": "1.0.0",
   "scripts": {
-    "dev": "node server.js",
+    "dev": "nodemon server.js",
     "build": "next build",
     "start": "next start"
   },

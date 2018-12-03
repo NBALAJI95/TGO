@@ -23099,12 +23099,12 @@ function (_Component) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          firstParam: "$ ".concat((parseFloat(subtotal(cart)) + subtotal(cart) * .05).toFixed(2)),
-          secondParam: 'yourOtherValue'
+          firstParam: "$ ".concat((parseFloat(subtotal(cart)) + 0.79).toFixed(2)),
+          secondParam: this.props.Cart
         })
       }).then(function (val) {
         try {
-          console.log("ORDER SUCCESS!!!", val);
+          console.log("ORDER SUCCESS!!!", val); // Need to update quantity w.r.t cart
 
           _this3.props.emptyCart();
 
@@ -23178,12 +23178,12 @@ function (_Component) {
           textAlign: 'right',
           fontSize: '1.1rem'
         }
-      }, "Service Fee: ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, " $ ", (subtotal(this.props.Cart) * .05).toFixed(2), " ")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+      }, "Service Fee: ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, " $ ", 0.79.toFixed(2), " ")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
         style: {
           textAlign: 'right',
           fontSize: '1.1rem'
         }
-      }, "Total: ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, " $ ", (parseFloat(subtotal(this.props.Cart)) + subtotal(this.props.Cart) * .05).toFixed(2), " "))) : ''), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["ModalFooter"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+      }, "Total: ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, " $ ", (parseFloat(subtotal(this.props.Cart)) + 0.79).toFixed(2), " "))) : ''), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["ModalFooter"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
         color: "success",
         disabled: this.props.Cart.length === 0,
         onClick: function onClick() {
