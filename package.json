@@ -7,20 +7,27 @@
     "start": "next start"
   },
   "dependencies": {
+    "@material-ui/core": "^3.6.1",
     "@zeit/next-css": "^1.0.1",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "next": "^7.0.2",
+    "next-images": "^1.0.3",
+    "next-routes": "^1.4.2",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-ionicons": "^2.1.6",
     "react-redux": "^5.0.1",
+    "react-select": "^2.1.2",
     "reactstrap": "^6.5.0",
     "redux": "^3.6.0",
     "redux-devtools-extension": "^2.13.2",
     "redux-thunk": "^2.1.0",
     "twilio": "^3.24.0"
   },
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "next-compose": "^0.0.2"
+  }
 }

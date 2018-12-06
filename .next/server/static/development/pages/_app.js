@@ -389,6 +389,117 @@ var _Products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__webpa
 
 /***/ }),
 
+/***/ "./redux/reducers/SignUpReducer.js":
+/*!*****************************************!*\
+  !*** ./redux/reducers/SignUpReducer.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var INITITAL_STATE = function INITITAL_STATE() {
+  return {
+    name: '',
+    email: '',
+    phoneNumber: '',
+    address: {
+      line1: '',
+      line2: '',
+      city: '',
+      state: '',
+      zip: ''
+    },
+    driveFor: {
+      Uber: false,
+      Lyft: false,
+      Neither: false
+    },
+    fullTimeOrPartTime: '',
+    ridesPerWeek: '',
+    commission: '',
+    referredBy: '',
+    valid: false
+  };
+};
+
+var formValid = function formValid(state) {
+  var name = state.name,
+      email = state.email,
+      phoneNumber = state.phoneNumber,
+      address = state.address,
+      driveFor = state.driveFor,
+      fullTimeOrPartTime = state.fullTimeOrPartTime,
+      ridesPerWeek = state.ridesPerWeek,
+      commission = state.commission;
+
+  if (name.length > 0 && email.length > 0 && phoneNumber.length >= 10 && address.line1.length > 0 && address.city.length > 0 && address.state && address.state.value.length > 0 && address.zip.length > 0 && (driveFor.Uber || driveFor.Lyft || driveFor.Neither) && fullTimeOrPartTime.length > 0 && ridesPerWeek.length > 0 && commission.length > 0) {
+    return _objectSpread({}, state, {
+      valid: true
+    });
+  }
+
+  return _objectSpread({}, state, {
+    valid: false
+  });
+};
+
+var validate = function validate(state) {
+  var driveFor = state.driveFor;
+  var Uber = driveFor.Uber,
+      Lyft = driveFor.Lyft,
+      Neither = driveFor.Neither;
+  var modify = {};
+
+  if (Uber || Lyft) {
+    modify = {
+      Neither: false
+    };
+  } else if (Neither) {
+    modify = {
+      Uber: false,
+      Lyft: false
+    };
+  }
+
+  return formValid(_objectSpread({}, state, {
+    driveFor: _objectSpread({}, driveFor, modify)
+  }));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (function () {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : INITITAL_STATE();
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case 'SET_STATE':
+      if (action.payload.property.indexOf('_') > 0) {
+        // address
+        var prop = action.payload.property.split('_');
+
+        if (prop[0].startsWith('driveFor')) {
+          return validate(_objectSpread({}, state, _defineProperty({}, prop[0], _objectSpread({}, state[prop[0]], _defineProperty({}, prop[1], action.payload.value)))));
+        }
+
+        return formValid(_objectSpread({}, state, _defineProperty({}, prop[0], _objectSpread({}, state[prop[0]], _defineProperty({}, prop[1], action.payload.value)))));
+      }
+
+      return formValid(_objectSpread({}, state, _defineProperty({}, action.payload.property, action.payload.value)));
+
+    case 'RESET':
+      return INITITAL_STATE();
+
+    default:
+      return state;
+  }
+});
+
+/***/ }),
+
 /***/ "./redux/reducers/index.js":
 /*!*********************************!*\
   !*** ./redux/reducers/index.js ***!
@@ -402,12 +513,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(redux__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _CartReducer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CartReducer */ "./redux/reducers/CartReducer.js");
 /* harmony import */ var _ProductsReducer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ProductsReducer */ "./redux/reducers/ProductsReducer.js");
+/* harmony import */ var _SignUpReducer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SignUpReducer */ "./redux/reducers/SignUpReducer.js");
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
   cart: _CartReducer__WEBPACK_IMPORTED_MODULE_1__["default"],
-  products: _ProductsReducer__WEBPACK_IMPORTED_MODULE_2__["default"]
+  products: _ProductsReducer__WEBPACK_IMPORTED_MODULE_2__["default"],
+  SignUp: _SignUpReducer__WEBPACK_IMPORTED_MODULE_3__["default"]
 }));
 
 /***/ }),
@@ -435,7 +549,29 @@ __webpack_require__.r(__webpack_exports__);
 
 var exampleInitialState = {
   cart: [],
-  products: []
+  products: [],
+  SignUp: {
+    name: '',
+    email: '',
+    phoneNumber: '',
+    address: {
+      line1: '',
+      line2: '',
+      city: '',
+      state: '',
+      zip: ''
+    },
+    driveFor: {
+      Uber: false,
+      Lyft: false,
+      Neither: false
+    },
+    fullTimeOrPartTime: '',
+    ridesPerWeek: '',
+    commission: '',
+    referredBy: '',
+    valid: false
+  }
 };
 function initializeStore() {
   var initialState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : exampleInitialState;
