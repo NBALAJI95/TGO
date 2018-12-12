@@ -21,7 +21,7 @@ class App extends Component {
 	}
 
   SignUp() {
-		fetch('http://172.20.5.56:3001/emailMLS', {
+		fetch('/emailMLS', {
 			method: 'POST',
 			headers: {
 				'Accept': 'application/json',
